@@ -1,11 +1,25 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {mount} from 'enzyme';
+import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 
-import HomePage from './index';
+import Container, {HomePage} from './index';
 
-describe('homepage', () => {
-  it('renders', ()=> {
-    const component = shallow(<HomePage />);
+const middlewares = [thunk];
+const mockStore = configureStore(middlewares);
+
+
+const initialStore = {
+  mockComments: {mockComments: [],},
+  redditComments: [],
+  redditArticles: [],
+};
+
+describe('HomePage', () => {
+  it('renders itself', () => {
+    const component = mount(<Container store={mockStore(initialStore)}/>);
     expect(component.length).toEqual(1);
+    component.unmount();
+
   });
 });

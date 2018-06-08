@@ -6,7 +6,7 @@ import {
   fetchRedditArticels,
 } from "../../../actions";
 
-class HomePage extends React.PureComponent {
+export class HomePage extends React.PureComponent {
   componentDidMount() {
     this.props.fetchMockComments();
     this.props.fetchRedditArticels();
