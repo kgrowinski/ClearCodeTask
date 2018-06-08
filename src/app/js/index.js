@@ -11,11 +11,12 @@ import HomePage from './components/pages/homepage';
 
 const store = createStore(
   reducers,
+  {},
   applyMiddleware(thunk)
 );
 
 
-class App extends React.Component {
+class App extends React.PureComponent {
   render() {
     return (
       <Provider store={store}>
