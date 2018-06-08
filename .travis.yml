@@ -1,0 +1,12 @@
+language: node_js
+
+cache:
+  yarn: true
+
+node_js: lts/*
+
+install:
+  - yarn --ignore-scripts
+
+script:
+  - yarn test

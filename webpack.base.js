@@ -1,11 +1,11 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-var debug = process.env.NODE_ENV !== "production";
-var webpack = require('webpack');
+const node_env = process.env.NODE_ENV;
+const webpack = require('webpack');
 
 
 module.exports = {
-
   // Enable webpack to run babel on every file
+  mode: node_env,
   module: {
     rules: [
       {
@@ -63,7 +63,7 @@ module.exports = {
       }
     ]
   },
-  plugins: debug ? [
+  plugins: node_env !== "production" ? [
     new ExtractTextPlugin({ // define where to save the file
       filename: 'main.bundle.css',
       allChunks: true,
