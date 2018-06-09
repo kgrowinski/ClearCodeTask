@@ -8,11 +8,11 @@ const port = process.env.PORT || 3000;
 
 app.use(express.static(path.resolve('public')));
 
-app.get('/*', function (req, res) {
+app.get('/*', (req, res) => {
   res.sendFile(path.resolve('public/index.html'));
 });
 
 
 app.listen(port, () => {
-  console.log("server started on port " + port);
+  console.log(`server started on port ${port}`);
 });
