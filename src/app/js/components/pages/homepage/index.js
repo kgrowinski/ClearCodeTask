@@ -1,46 +1,81 @@
 import React from 'react';
-import {connect} from 'react-redux'
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-import {
-  fetchMockComments,
-  fetchRedditArticels,
-} from "../../../actions";
+import { fetchRedditArticles } from '../../../actions';
 
-export class HomePage extends React.PureComponent {
+export class HomePageDumb extends React.PureComponent {
   componentDidMount() {
-    this.props.fetchMockComments();
-    this.props.fetchRedditArticels();
+    this.props.fetchRedditArticles();
   }
 
-  renderMockComments() {
-    return this.props.mockComments.map((comment, index) => {
+  renderRedditArticles() {
+    const { redditArticles } = this.props;
+    return Object.keys(redditArticles).map((article) => {
+      const { data } = redditArticles[article];
+
       return (
-        <div key={index}>
-          {comment.body}
-        </div>
-      )
-    })
+        <li className="list-group-item" key={data.id}>
+          <Link to={`/article/${data.id}`}>
+            {data.title}
+          </Link>
+        </li>
+      );
+    });
   }
 
   render() {
     return (
-      <div>
+      <div className={"container"}>
         Hello
-        {this.renderMockComments()}
+        <ul className="list-group">
+          {this.renderRedditArticles()}
+        </ul>
+        <div>
+          <nav aria-label="Page navigation example">
+            <ul className="pagination">
+              <li className="page-item">
+                <a className="page-link" href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span className="sr-only">Previous</span>
+                </a>
+              </li>
+              <li className="page-item"><a className="page-link" href="#">1</a></li>
+              <li className="page-item"><a className="page-link" href="#">2</a></li>
+              <li className="page-item"><a className="page-link" href="#">3</a></li>
+              <li className="page-item">
+                <a className="page-link" href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span className="sr-only">Next</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     );
   }
 }
 
+HomePageDumb.propTypes = {
+  redditArticles: PropTypes.arrayOf(PropTypes.object),
+  fetchRedditArticles: PropTypes.func,
+};
+
+HomePageDumb.defaultProps = {
+  redditArticles: [],
+  fetchRedditArticles: () => true,
+};
+
 function mapStateToProps(store) {
   return {
-    mockComments: store.mockComments.mockComments,
-  }
+    redditArticles: store.redditArticles.redditArticles,
+  };
 }
 
 const mapDispatchToProps = {
-  fetchMockComments,
-  fetchRedditArticels
+  fetchRedditArticles,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
+export default connect(mapStateToProps, mapDispatchToProps)(HomePageDumb);

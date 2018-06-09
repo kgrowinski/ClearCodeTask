@@ -1,11 +1,12 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const node_env = process.env.NODE_ENV;
+
+const nodeEnv = process.env.NODE_ENV;
 const webpack = require('webpack');
 
 
 module.exports = {
   // Enable webpack to run babel on every file
-  mode: node_env,
+  mode: nodeEnv,
   module: {
     rules: [
       {
@@ -19,13 +20,13 @@ module.exports = {
             ['env',
               {
                 targets: {
-                  browsers: ['last 2 versions']
-                }
-              }
-            ]
-          ]
+                  browsers: ['last 2 versions'],
+                },
+              },
+            ],
+          ],
 
-        }
+        },
       },
       {
         test: /\.(jpg|png|gif|svg)$/,
@@ -33,7 +34,7 @@ module.exports = {
         options: {
           mozjpeg: {
             progressive: true,
-            quality: 65
+            quality: 65,
           },
           // optipng.enabled: false will disable optipng
           optipng: {
@@ -41,29 +42,29 @@ module.exports = {
           },
           pngquant: {
             quality: '65-90',
-            speed: 4
+            speed: 4,
           },
           gifsicle: {
             interlaced: false,
           },
           // the webp option will enable WEBP
           webp: {
-            quality: 75
-          }
-        }
+            quality: 75,
+          },
+        },
       },
       {
         test: /\.(sass|scss)$/,
-        loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
+        loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader']),
       },
       {
         exclude: /\.scss?$/,
         test: /\.(png|jpg)$/,
-        loader: 'url-loader'
-      }
-    ]
+        loader: 'url-loader',
+      },
+    ],
   },
-  plugins: node_env !== "production" ? [
+  plugins: nodeEnv !== 'production' ? [
     new ExtractTextPlugin({ // define where to save the file
       filename: 'main.bundle.css',
       allChunks: true,
@@ -74,10 +75,10 @@ module.exports = {
       allChunks: true,
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
+      'process.env.NODE_ENV': JSON.stringify('production'),
     }),
     new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true
-    })
-  ]
+      sourceMap: true,
+    }),
+  ],
 };

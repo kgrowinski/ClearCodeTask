@@ -17,8 +17,8 @@ const config = {
   },
 
   externals: [
-    webpackNodeExternals()
-  ]
+    webpackNodeExternals(),
+  ],
 };
 
 module.exports = merge(baseConfig, config);

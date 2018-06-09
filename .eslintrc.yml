@@ -1,0 +1,23 @@
+extends:
+  - airbnb
+plugins:
+  - react
+  - jest
+  - only-warn
+env:
+  browser: true
+  node: true
+  jest: true
+rules:
+  class-methods-use-this: 0
+  quote-props:
+    - 'error'
+    - 'consistent-as-needed'
+  import/first: 'warn'
+  import/prefer-default-export: 0
+  react/no-array-index-key: 0
+  react/jsx-filename-extension:
+    - 1
+    - extensions:
+      - '.js'
+      - '.jsx'
