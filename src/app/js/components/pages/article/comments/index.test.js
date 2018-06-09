@@ -1,4 +1,6 @@
 describe('Comments', () => {
   // TODO: write real tests for component.
-  it('renders itself', () => true);
+  it('renders itself', () => {
+    expect(true).toBe(true);
+  });
 });
