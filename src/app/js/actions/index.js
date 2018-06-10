@@ -13,7 +13,7 @@ export const fetchMockComments = () => async (dispatch) => {
 };
 
 export const fetchRedditArticles = () => async (dispatch) => {
-  const res = await axios.get('http://www.reddit.com/r/subreddit/new/.json?', {
+  const res = await axios.get('http://www.reddit.com/r/redditdev/new.json?', {
     params: {
       limit: 100,
     },
