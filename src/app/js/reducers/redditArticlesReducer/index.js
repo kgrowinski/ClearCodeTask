@@ -1,13 +1,16 @@
 import { FETCH_REDDIT_ARTICLES, SET_PAGINATION_DATA } from '../../actions/types';
+import Config from '../../configuration';
+
+const { articlesAmmount, paginationLimit } = Config;
 
 const initialState = {
   articles: [],
   paginationData: {
-    limit: 5,
+    limit: paginationLimit,
     nextAfter: 0,
     firstPagination: 1,
     currentPagination: 1,
-    paginationSize: 21,
+    paginationSize: (articlesAmmount / paginationLimit) + 1,
   },
 };
 

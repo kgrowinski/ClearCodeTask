@@ -8,8 +8,7 @@ import { fetchRedditArticles, setPaginationData } from '../../../actions';
 
 export class HomePageDumb extends React.Component {
   componentDidMount() {
-    const { paginationData } = this.props;
-    this.props.fetchRedditArticles(paginationData);
+    this.props.fetchRedditArticles();
   }
 
   changePagination(operator) {
@@ -42,7 +41,7 @@ export class HomePageDumb extends React.Component {
 
   renderPagination() {
     const {
-      limit, paginationSize, currentPagination, firstPagination,
+      limit, currentPagination, firstPagination, paginationSize,
     } = this.props.paginationData;
 
     return [...Array(5)].map((item, index) => {
@@ -88,7 +87,7 @@ export class HomePageDumb extends React.Component {
   render() {
     return (
       <div className="container container__flex">
-        <h2>Paginated List of New SubReddits</h2>
+        <h2>Paginated List of New Reddits</h2>
         <ul className="list-group list__full">
           {this.renderRedditArticles()}
         </ul>
