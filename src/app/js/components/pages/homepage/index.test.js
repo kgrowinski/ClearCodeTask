@@ -10,13 +10,15 @@ const mockStore = configureStore(middlewares);
 
 
 const initialStore = {
-  articles: [],
-  paginationData: {
-    limit: 5,
-    nextAfter: 0,
-    firstPagination: 1,
-    currentPagination: 1,
-    paginationSize: 20,
+  redditArticles: {
+    articles: [],
+    paginationData: {
+      limit: 5,
+      nextAfter: 0,
+      firstPagination: 1,
+      currentPagination: 1,
+      paginationSize: 20,
+    },
   },
 };
 
