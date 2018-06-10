@@ -1,10 +1,12 @@
 import axios from 'axios';
-
+import Config from '../configuration';
 import { FETCH_MOCK_COMMENTS, FETCH_REDDIT_ARTICLES, SET_PAGINATION_DATA } from './types';
+
+const { redditArticlesURL, mockCommentsURL, articlesAmmount } = Config;
 
 export const fetchMockComments = () => async (dispatch) => {
   // TODO: Add error handling.
-  const res = await axios.get('http://localhost:3300/comments');
+  const res = await axios.get(mockCommentsURL);
 
   dispatch({
     type: FETCH_MOCK_COMMENTS,
@@ -12,10 +14,10 @@ export const fetchMockComments = () => async (dispatch) => {
   });
 };
 
-export const fetchRedditArticles = () => async (dispatch) => {
-  const res = await axios.get('http://www.reddit.com/r/redditdev/new.json?', {
+export const fetchRedditArticles = (limit = articlesAmmount) => async (dispatch) => {
+  const res = await axios.get(redditArticlesURL, {
     params: {
-      limit: 100,
+      limit,
     },
   });
 
