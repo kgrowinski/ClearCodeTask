@@ -7,7 +7,7 @@ const initialState = {
     nextAfter: 0,
     firstPagination: 1,
     currentPagination: 1,
-    paginationSize: 20,
+    paginationSize: 21,
   },
 };
 
