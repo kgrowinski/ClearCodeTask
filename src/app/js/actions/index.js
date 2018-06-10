@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { FETCH_MOCK_COMMENTS, FETCH_REDDIT_ARTICLES } from './types';
+import { FETCH_MOCK_COMMENTS, FETCH_REDDIT_ARTICLES, SET_PAGINATION_DATA } from './types';
 
 export const fetchMockComments = () => async (dispatch) => {
   // TODO: Add error handling.
@@ -13,10 +13,19 @@ export const fetchMockComments = () => async (dispatch) => {
 };
 
 export const fetchRedditArticles = () => async (dispatch) => {
-  const res = await axios.get('http://www.reddit.com/r/subreddit/new/.json?limit=100');
+  const res = await axios.get('http://www.reddit.com/r/subreddit/new/.json?', {
+    params: {
+      limit: 100,
+    },
+  });
 
   dispatch({
     type: FETCH_REDDIT_ARTICLES,
     payload: res,
   });
 };
+
+export const setPaginationData = paginationData => ({
+  type: SET_PAGINATION_DATA,
+  payload: paginationData,
+});

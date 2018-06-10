@@ -10,9 +10,14 @@ const mockStore = configureStore(middlewares);
 
 
 const initialStore = {
-  redditComments: [],
-  mockComments: { mockComments: [] },
-  redditArticles: [],
+  articles: [],
+  paginationData: {
+    limit: 5,
+    nextAfter: 0,
+    firstPagination: 1,
+    currentPagination: 1,
+    paginationSize: 20,
+  },
 };
 
 describe('HomePage', () => {

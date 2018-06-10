@@ -1,16 +1,28 @@
-import {FETCH_REDDIT_ARTICLES} from '../../actions/types';
+import { FETCH_REDDIT_ARTICLES, SET_PAGINATION_DATA } from '../../actions/types';
 
 const initialState = {
-  redditArticles: [],
+  articles: [],
+  paginationData: {
+    limit: 5,
+    nextAfter: 0,
+    firstPagination: 1,
+    currentPagination: 1,
+    paginationSize: 20,
+  },
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
     case FETCH_REDDIT_ARTICLES:
       return Object.assign({}, state, {
-        redditArticles: action.payload.data.data.children,
+        articles: action.payload.data.data.children,
+      });
+    case SET_PAGINATION_DATA:
+      return Object.assign({}, state, {
+        paginationData: action.payload,
       });
     default:
       return state;
   }
 }
+
