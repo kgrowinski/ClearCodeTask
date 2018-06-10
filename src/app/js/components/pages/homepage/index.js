@@ -48,7 +48,7 @@ export class HomePageDumb extends React.Component {
     return [...Array(5)].map((item, index) => {
       const newPaginationData = {
         limit,
-        nextAfter: (currentPagination + index) * limit,
+        nextAfter: ((currentPagination + index) - 1) * limit,
         firstPagination,
         currentPagination,
         paginationSize,
