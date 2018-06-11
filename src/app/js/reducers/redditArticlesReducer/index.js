@@ -21,19 +21,32 @@ const setPaginationData = (dist, after, before) => ({
 export default function (state = initialState, action) {
   switch (action.type) {
     case FETCH_REDDIT_ARTICLES:
+      const { dist, children } = action.payload.data.data;
+
+      if (!children[dist - 1] || (children[dist - 1].data.name === state.paginationData.after)) {
+        return Object.assign({}, state, {
+          articles: state.articles,
+          paginationData: {
+            ...setPaginationData(
+              state.paginationData.dist,
+              state.paginationData.after,
+              null,
+            ),
+          },
+        });
+      }
+
       return Object.assign({}, state, {
-        articles: action.payload.data.data.children,
+        articles: children,
         paginationData: {
-          ...state.paginationData,
           ...setPaginationData(
-            action.payload.data.data.dist,
-            action.payload.data.data.children[4].data.name,
-            action.payload.data.data.children[0].data.name,
+            dist,
+            children[dist - 1].data.name,
+            children[0].data.name,
           ),
         },
       });
     case SET_PAGINATION_DATA:
-
       return Object.assign({}, state, {
         paginationData: action.payload,
       });

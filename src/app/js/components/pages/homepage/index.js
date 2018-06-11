@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
+import Config from '../../../configuration';
 import { Link } from 'react-router-dom';
 
 import { fetchRedditArticles, setPaginationData } from '../../../actions';
+
+const { articlesAmmount } = Config;
 
 export class HomePageDumb extends React.Component {
   componentDidMount() {
@@ -12,7 +16,7 @@ export class HomePageDumb extends React.Component {
     this.props.fetchRedditArticles(dist, id || null);
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     const { dist, after, before } = this.props.paginationData;
     const { id } = this.props.match.params;
     if (id === before) {
@@ -47,11 +51,11 @@ export class HomePageDumb extends React.Component {
       const { data } = redditArticles[article];
 
       return (
-        // <Link to={`/article/${data.id}`} key={data.id}>
-        <li className="list-group-item" key={data.id}>
-          {data.title}
-        </li>
-        // </Link>
+        <Link to={`/article/${data.name}`} key={data.id}>
+          <li className="list-group-item">
+            {data.title}
+          </li>
+        </Link>
       );
     });
   }
@@ -59,16 +63,28 @@ export class HomePageDumb extends React.Component {
 
   render() {
     const { id } = this.props.match.params;
+    const { dist, before } = this.props.paginationData;
+
+    if (!dist) {
+      return (
+        <div className="container container__flex">
+          <h2>Paginated List of New Redditdev Posts</h2>
+          <div className="list__full">
+            <h4>There is no data</h4>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="container container__flex">
-        <h2>Paginated List of New Reddits</h2>
+        <h2>Paginated List of New Redditdev Posts</h2>
         <ul className="list-group list__full">
           {this.renderRedditArticles()}
         </ul>
         <div className="pagination__main">
           <nav aria-label="Page navigation example">
             <ul className="pagination">
-              {id &&
+              {(id && before) &&
               <li className="page-item" onClick={() => this.changePagination('prev')}>
                 <div className="page-link" aria-label="Previous">
                   <span aria-hidden="true">&laquo; Previous</span>
