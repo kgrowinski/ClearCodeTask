@@ -25,10 +25,15 @@ const initialStore = {
     },
   },
 };
+const match = {
+  params: {
+    id: 1,
+  },
+};
 
 describe('HomePage', () => {
   it('renders itself', () => {
-    const component = mount(<Container store={mockStore(initialStore)} />);
+    const component = mount(<Container match={match} store={mockStore(initialStore)} />);
     expect(component.length).toEqual(1);
     component.unmount();
   });
