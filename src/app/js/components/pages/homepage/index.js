@@ -13,11 +13,13 @@ export class HomePageDumb extends React.Component {
 
   changePagination(operator) {
     const {
-      limit, paginationSize, currentPagination, firstPagination, nextAfter,
+      limit, paginationSize, currentPagination, firstPagination, nextAfter, dist, after,
     } = this.props.paginationData;
     const newPaginationData = {
+      dist,
       limit,
       nextAfter,
+      after,
       firstPagination,
       paginationSize,
     };
@@ -37,15 +39,19 @@ export class HomePageDumb extends React.Component {
       newPaginationData.currentPagination <= paginationSize - limit) {
       this.props.setPaginationData(newPaginationData);
     }
+    if (dist - limit === nextAfter && operator !== 'subtract') {
+      this.props.fetchRedditArticles(dist, after);
+    }
   }
 
   renderPagination() {
     const {
-      limit, currentPagination, firstPagination, paginationSize,
+      limit, currentPagination, firstPagination, paginationSize, dist, after,
     } = this.props.paginationData;
 
-    return [...Array(5)].map((item, index) => {
+    return [...Array(limit)].map((item, index) => {
       const newPaginationData = {
+        dist,
         limit,
         nextAfter: ((currentPagination + index) - 1) * limit,
         firstPagination,
@@ -57,7 +63,12 @@ export class HomePageDumb extends React.Component {
         <li
           className="page-item"
           key={index}
-          onClick={() => this.props.setPaginationData(newPaginationData)}
+          onClick={() => {
+            this.props.setPaginationData(newPaginationData);
+            if (dist - limit === newPaginationData.nextAfter) {
+              this.props.fetchRedditArticles(dist, after);
+            }
+          }}
         >
           <div className="page-link">
             {currentPagination + index}
