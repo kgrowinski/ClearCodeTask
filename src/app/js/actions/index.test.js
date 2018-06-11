@@ -1,15 +1,7 @@
 import {
   fetchMockComments,
   fetchRedditArticles,
-  setPaginationData,
 } from './index';
-
-describe('setPaginationData', () => {
-  it('returnsObject', () => {
-    const parameter = 1;
-    expect(setPaginationData(parameter) instanceof Object).toBe(true);
-  });
-});
 
 describe('fetchRedditArticles', () => {
   it('returnsObject', async () => {

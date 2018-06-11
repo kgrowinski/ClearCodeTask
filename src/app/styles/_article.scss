@@ -1,0 +1,17 @@
+.container__reddit-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  p{
+    text-align: left;
+  }
+}
+
+.comments {
+  margin-bottom: 30px;
+}
+
+textarea {
+  resize: none;
+}
