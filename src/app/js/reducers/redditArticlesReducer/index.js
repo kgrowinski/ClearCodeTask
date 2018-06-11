@@ -6,33 +6,29 @@ const { paginationLimit } = Config;
 const initialState = {
   articles: [],
   paginationData: {
-    dist: 0,
-    after: '',
-    limit: paginationLimit,
-    nextAfter: 0,
-    firstPagination: 1,
-    currentPagination: 1,
+    dist: paginationLimit,
+    before: null,
+    after: null,
   },
 };
 
-const setPaginationData = (prevDist, dist, limit, after) => ({
-  dist: prevDist + dist,
-  paginationSize: ((prevDist + dist) / limit) + 1,
+const setPaginationData = (dist, after, before) => ({
+  dist,
   after,
+  before,
 });
 
 export default function (state = initialState, action) {
   switch (action.type) {
     case FETCH_REDDIT_ARTICLES:
       return Object.assign({}, state, {
-        articles: [...state.articles, ...action.payload.data.data.children],
+        articles: action.payload.data.data.children,
         paginationData: {
           ...state.paginationData,
           ...setPaginationData(
-            state.paginationData.dist,
             action.payload.data.data.dist,
-            state.paginationData.limit,
-            action.payload.data.data.after,
+            action.payload.data.data.children[4].data.name,
+            action.payload.data.data.children[0].data.name,
           ),
         },
       });

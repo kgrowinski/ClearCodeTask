@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -8,80 +7,43 @@ import { fetchRedditArticles, setPaginationData } from '../../../actions';
 
 export class HomePageDumb extends React.Component {
   componentDidMount() {
-    this.props.fetchRedditArticles();
+    const { dist } = this.props.paginationData;
+    const { id } = this.props.match.params;
+    this.props.fetchRedditArticles(dist, id || null);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { dist, after, before } = this.props.paginationData;
+    const { id } = this.props.match.params;
+    if (id === before) {
+      this.props.fetchRedditArticles(dist, null, id);
+    }
+    if (id === after) {
+      this.props.fetchRedditArticles(dist, id, null);
+    }
   }
 
   changePagination(operator) {
-    const {
-      limit, paginationSize, currentPagination, firstPagination, nextAfter, dist, after,
-    } = this.props.paginationData;
-    const newPaginationData = {
-      dist,
-      limit,
-      nextAfter,
-      after,
-      firstPagination,
-      paginationSize,
-    };
+    const { after, before } = this.props.paginationData;
+    const { id } = this.props.match.params;
 
     switch (operator) {
-      case 'add':
-        newPaginationData.currentPagination = currentPagination + 1;
+      case 'next':
+        this.props.history.push(after);
         break;
-      case 'subtract':
-        newPaginationData.currentPagination = currentPagination - 1;
+      case 'prev':
+        if (id) {
+          this.props.history.push(before);
+        }
         break;
       default:
-        return;
+        break;
     }
-
-    if (newPaginationData.currentPagination >= firstPagination &&
-      newPaginationData.currentPagination <= paginationSize - limit) {
-      this.props.setPaginationData(newPaginationData);
-    }
-    if (dist - limit === nextAfter && operator !== 'subtract') {
-      this.props.fetchRedditArticles(dist, after);
-    }
-  }
-
-  renderPagination() {
-    const {
-      limit, currentPagination, firstPagination, paginationSize, dist, after,
-    } = this.props.paginationData;
-
-    return [...Array(limit)].map((item, index) => {
-      const newPaginationData = {
-        dist,
-        limit,
-        nextAfter: ((currentPagination + index) - 1) * limit,
-        firstPagination,
-        currentPagination,
-        paginationSize,
-      };
-
-      return (
-        <li
-          className="page-item"
-          key={index}
-          onClick={() => {
-            this.props.setPaginationData(newPaginationData);
-            if (dist - limit === newPaginationData.nextAfter) {
-              this.props.fetchRedditArticles(dist, after);
-            }
-          }}
-        >
-          <div className="page-link">
-            {currentPagination + index}
-          </div>
-        </li>
-      );
-    });
   }
 
   renderRedditArticles() {
-    const { redditArticles, paginationData } = this.props;
-    const { nextAfter, limit } = paginationData;
-    return _.slice(Object.keys(redditArticles), nextAfter, nextAfter + limit).map((article) => {
+    const { redditArticles } = this.props;
+    return Object.keys(redditArticles).map((article) => {
       const { data } = redditArticles[article];
 
       return (
@@ -96,6 +58,7 @@ export class HomePageDumb extends React.Component {
 
 
   render() {
+    const { id } = this.props.match.params;
     return (
       <div className="container container__flex">
         <h2>Paginated List of New Reddits</h2>
@@ -105,16 +68,17 @@ export class HomePageDumb extends React.Component {
         <div className="pagination__main">
           <nav aria-label="Page navigation example">
             <ul className="pagination">
-              <li className="page-item" onClick={() => this.changePagination('subtract')}>
+              {id &&
+              <li className="page-item" onClick={() => this.changePagination('prev')}>
                 <div className="page-link" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
+                  <span aria-hidden="true">&laquo; Previous</span>
                   <span className="sr-only">Previous</span>
                 </div>
               </li>
-              {this.renderPagination()}
-              <li className="page-item" onClick={() => this.changePagination('add')}>
+              }
+              <li className="page-item" onClick={() => this.changePagination('next')}>
                 <div className="page-link" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
+                  <span aria-hidden="true">Next &raquo;</span>
                   <span className="sr-only">Next</span>
                 </div>
               </li>
@@ -128,12 +92,14 @@ export class HomePageDumb extends React.Component {
 
 HomePageDumb.propTypes = {
   redditArticles: PropTypes.arrayOf(PropTypes.object),
+  match: PropTypes.object,
   paginationData: PropTypes.object,
   setPaginationData: PropTypes.func,
   fetchRedditArticles: PropTypes.func,
 };
 
 HomePageDumb.defaultProps = {
+  match: {},
   redditArticles: [],
   paginationData: {},
   setPaginationData: () => true,
