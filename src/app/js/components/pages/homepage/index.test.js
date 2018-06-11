@@ -3,7 +3,10 @@ import { mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
+import Config from '../../../configuration';
 import Container, { HomePageDumb } from './index';
+
+const { paginationLimit } = Config;
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -13,11 +16,12 @@ const initialStore = {
   redditArticles: {
     articles: [],
     paginationData: {
-      limit: 5,
+      dist: 0,
+      after: '',
+      limit: paginationLimit,
       nextAfter: 0,
       firstPagination: 1,
       currentPagination: 1,
-      paginationSize: 20,
     },
   },
 };

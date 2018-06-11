@@ -14,19 +14,21 @@ export const fetchMockComments = () => async (dispatch) => {
   });
 };
 
-export const fetchRedditArticles = (limit = articlesAmmount, after = null) => async (dispatch) => {
-  const res = await axios.get(redditArticlesURL, {
-    params: {
-      limit,
-      after,
-    },
-  });
+export const fetchRedditArticles = (limit = articlesAmmount, after = null, before = null) =>
+  async (dispatch) => {
+    const res = await axios.get(redditArticlesURL, {
+      params: {
+        limit,
+        after,
+        before,
+      },
+    });
 
-  dispatch({
-    type: FETCH_REDDIT_ARTICLES,
-    payload: res,
-  });
-};
+    dispatch({
+      type: FETCH_REDDIT_ARTICLES,
+      payload: res,
+    });
+  };
 
 export const setPaginationData = paginationData => ({
   type: SET_PAGINATION_DATA,
