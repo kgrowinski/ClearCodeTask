@@ -2,12 +2,9 @@ require('babel-polyfill');
 const path = require('path');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.js');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const debug = process.env.NODE_ENV !== 'production';
-
-if (debug) {
-  console.log('Looks like we are in development mode!');
-}
 
 const config = {
   // Root File of server app
@@ -17,8 +14,16 @@ const config = {
   // Directory to output bundle file
   output: {
     filename: 'main.bundle.js',
-    path: path.resolve(__dirname, 'public'),
+    path: path.resolve(__dirname, 'build'),
   },
+  plugins: [
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, 'public'),
+        to: path.resolve(__dirname, 'build'),
+      },
+    ]),
+  ],
 };
 
 module.exports = merge(baseConfig, config);

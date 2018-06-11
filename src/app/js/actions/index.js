@@ -14,10 +14,11 @@ export const fetchMockComments = () => async (dispatch) => {
   });
 };
 
-export const fetchRedditArticles = (limit = articlesAmmount) => async (dispatch) => {
+export const fetchRedditArticles = (limit = articlesAmmount, after = null) => async (dispatch) => {
   const res = await axios.get(redditArticlesURL, {
     params: {
       limit,
+      after,
     },
   });
 
