@@ -1,13 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { connect } from 'react-redux';
-
-import Config from '../../../configuration';
 import { Link } from 'react-router-dom';
 
-import { fetchRedditArticles, setPaginationData } from '../../../actions';
-
-const { articlesAmmount } = Config;
+import { fetchRedditArticles } from '../../../actions';
 
 export class HomePageDumb extends React.Component {
   componentDidMount() {
@@ -51,11 +48,15 @@ export class HomePageDumb extends React.Component {
       const { data } = redditArticles[article];
 
       return (
-        <Link to={`/article/${data.name}`} key={data.id}>
-          <li className="list-group-item">
-            {data.title}
-          </li>
-        </Link>
+        <div className="list-group" key={data.id}>
+          <Link to={`/articles/${data.id}`} className="list-group-item list-group-item-action flex-column align-items-start">
+            <div className="d-flex w-100 justify-content-between">
+              <h5 className="mb-1">{data.author}</h5>
+              <small>{moment.unix(data.created).utc().format('DD MM YYYY')}</small>
+            </div>
+            <p className="mb-1">{data.title}</p>
+          </Link>
+        </div>
       );
     });
   }
@@ -110,16 +111,16 @@ HomePageDumb.propTypes = {
   redditArticles: PropTypes.arrayOf(PropTypes.object),
   match: PropTypes.object,
   paginationData: PropTypes.object,
-  setPaginationData: PropTypes.func,
   fetchRedditArticles: PropTypes.func,
+  history: PropTypes.object,
 };
 
 HomePageDumb.defaultProps = {
   match: {},
   redditArticles: [],
   paginationData: {},
-  setPaginationData: () => true,
   fetchRedditArticles: () => true,
+  history: {},
 };
 
 function mapStateToProps(store) {
@@ -131,7 +132,6 @@ function mapStateToProps(store) {
 
 const mapDispatchToProps = {
   fetchRedditArticles,
-  setPaginationData,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePageDumb);

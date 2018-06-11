@@ -22,8 +22,9 @@ const App = () => (
     <Router>
       <div>
         <Switch>
+          <Route path="/articles/:id" component={Article} />
           <Route path="/:id?" component={HomePage} />
-          <Route path="/article/:id" component={Article} />
+          {/*<Route path="*" component={Page404} />*/}
         </Switch>
       </div>
     </Router>
