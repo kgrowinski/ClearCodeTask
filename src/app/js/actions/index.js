@@ -1,17 +1,19 @@
 import axios from 'axios';
+import moment from 'moment';
 import Config from '../configuration';
-import { FETCH_MOCK_COMMENTS, FETCH_REDDIT_ARTICLES, FETCH_CURRENT_ARTICLE } from './types';
+import {FETCH_MOCK_COMMENTS, FETCH_REDDIT_ARTICLES, FETCH_CURRENT_ARTICLE} from './types';
 
 const {
   redditArticlesURL, redditSingleArticleURL, mockCommentsURL, articlesAmmount,
 } = Config;
 
-export const fetchMockComments = () => async (dispatch) => {
+export const fetchMockComments = id => async (dispatch) => {
   const res = await axios.get(mockCommentsURL);
 
   dispatch({
     type: FETCH_MOCK_COMMENTS,
     payload: res,
+    id,
   });
 };
 
@@ -39,3 +41,4 @@ export const fetchCurrentReddit = redditID =>
       payload: res,
     });
   };
+

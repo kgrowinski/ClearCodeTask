@@ -1,11 +1,20 @@
-import { FETCH_REDDIT_ARTICLES, SET_PAGINATION_DATA, FETCH_CURRENT_ARTICLE } from '../../actions/types';
+/* eslint-disable no-case-declarations */
+import {
+  FETCH_REDDIT_ARTICLES,
+  FETCH_CURRENT_ARTICLE,
+  FETCH_MOCK_COMMENTS,
+} from '../../actions/types';
 import Config from '../../configuration';
 
 const { paginationLimit } = Config;
 
 const initialState = {
   articles: [],
-  currentReddit: {},
+  currentReddit: {
+    data: {},
+    comments: [],
+  },
+  mockComments: [],
   paginationData: {
     dist: paginationLimit,
     before: null,
@@ -20,45 +29,46 @@ const setPaginationData = (dist, after, before) => ({
 });
 
 export default function (state = initialState, action) {
-  if (action.type === FETCH_CURRENT_ARTICLE) {
-    const { data } = action.payload;
-    return Object.assign({}, state, {
-      currentReddit: {
-        data: data[0].data.children[0].data,
-        comments: data[data.length - 1].data.children,
-      },
-    });
-  } else if (action.type === FETCH_REDDIT_ARTICLES) {
-    const { dist, children } = action.payload.data.data;
-
-    if (!children[dist - 1] || (children[dist - 1].data.name === state.paginationData.after)) {
+  switch (action.type) {
+    case FETCH_CURRENT_ARTICLE:
       return Object.assign({}, state, {
-        articles: state.articles,
+        currentReddit: {
+          data: action.payload.data[0].data.children[0].data,
+          comments: action.payload.data[action.payload.data.length - 1].data.children,
+        },
+      });
+    case FETCH_MOCK_COMMENTS:
+      return Object.assign({}, state, {
+        mockComments: action.payload.data,
+      });
+    case FETCH_REDDIT_ARTICLES:
+      const { dist, children } = action.payload.data.data;
+
+      if (!children[dist - 1] || (children[dist - 1].data.name === state.paginationData.after)) {
+        return Object.assign({}, state, {
+          articles: state.articles,
+          paginationData: {
+            ...setPaginationData(
+              state.paginationData.dist,
+              state.paginationData.after,
+              null,
+            ),
+          },
+        });
+      }
+
+      return Object.assign({}, state, {
+        articles: children,
         paginationData: {
           ...setPaginationData(
-            state.paginationData.dist,
-            state.paginationData.after,
-            null,
+            dist,
+            children[dist - 1].data.name,
+            children[0].data.name,
           ),
         },
       });
-    }
-
-    return Object.assign({}, state, {
-      articles: children,
-      paginationData: {
-        ...setPaginationData(
-          dist,
-          children[dist - 1].data.name,
-          children[0].data.name,
-        ),
-      },
-    });
-  } else if (action.type === SET_PAGINATION_DATA) {
-    return Object.assign({}, state, {
-      paginationData: action.payload,
-    });
+    default:
+      return state;
   }
-  return state;
 }
 
