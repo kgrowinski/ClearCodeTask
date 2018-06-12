@@ -24,7 +24,6 @@ const App = () => (
         <Switch>
           <Route path="/articles/:id" component={Article} />
           <Route path="/:id?" component={HomePage} />
-          {/*<Route path="*" component={Page404} />*/}
         </Switch>
       </div>
     </Router>

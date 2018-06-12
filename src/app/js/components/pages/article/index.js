@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import axios from 'axios/index';
 import { connect } from 'react-redux';
-import { fetchCurrentReddit, fetchMockComments, postFakeComment } from '../../../actions';
+import { fetchCurrentReddit, fetchMockComments } from '../../../actions';
 
 import Config from '../../../configuration';
 
 const { mockCommentsURL } = Config;
 
-export class ArticleDumb extends React.Component {
+export class ArticleDumb extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -26,6 +26,7 @@ export class ArticleDumb extends React.Component {
   }
 
   async publishFakeComment(evt) {
+    console.log(evt);
     evt.preventDefault();
     const { commentBody, commentAuthor } = this.state;
     const { id } = this.props.match.params;
@@ -40,28 +41,39 @@ export class ArticleDumb extends React.Component {
       id: this.props.mockComments.length + 1,
     };
 
-    try {
-      await axios({
-        url: mockCommentsURL,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data,
+    if (commentAuthor && commentBody) {
+      try {
+        await axios({
+          url: mockCommentsURL,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      this.props.fetchMockComments(id);
+      this.setState({
+        commentBody: '',
+        commentAuthor: '',
       });
-    } catch (err) {
-      console.log(err);
+    } else {
+      this.setState({
+        error: 'All Fields are required',
+      });
     }
-    this.props.fetchMockComments(id);
   }
 
   renderComments() {
     const { id } = this.props.match.params;
     const { activeReddit, mockComments } = this.props;
+
     const comments = [
-      ...activeReddit.comments,
       ...mockComments.filter(item => item.data.postId === id),
-    ].sort(item => new moment().unix(item.data.created)).reverse();
+      ...activeReddit.comments,
+    ].sort(item => new moment().unix(item.data.created));
 
     return comments.map((comment, index) => {
       const { body, author, created } = comment.data;
@@ -82,7 +94,9 @@ export class ArticleDumb extends React.Component {
       return null;
     }
 
+    const { commentBody, commentAuthor, error } = this.state;
     const { selftext, author, created } = this.props.activeReddit.data;
+
     return (
       <div className="container">
         <div className="jumbotron">
@@ -97,10 +111,16 @@ export class ArticleDumb extends React.Component {
         <div className="comments">
           <h3>Comments:</h3>
           <div className="list-group">
-
             {this.renderComments()}
           </div>
         </div>
+        {error &&
+        <div className="comments">
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        </div>
+        }
         <div className="comments">
           <h3>Add Comment:</h3>
           <form onSubmit={evt => this.publishFakeComment(evt)}>
@@ -108,7 +128,7 @@ export class ArticleDumb extends React.Component {
               <label htmlFor="exampleFormControlInput1">Email address</label>
               <input
                 onChange={e => this.setState({ commentAuthor: e.target.value })}
-                value={this.state.commentAuthor}
+                value={commentAuthor}
                 type="email"
                 className="form-control"
                 id="exampleFormControlInput1"
@@ -119,13 +139,21 @@ export class ArticleDumb extends React.Component {
               <label htmlFor="exampleFormControlTextarea1">Example textarea</label>
               <textarea
                 onChange={e => this.setState({ commentBody: e.target.value })}
-                value={this.state.commentBody}
+                value={commentBody}
                 className="form-control"
                 id="exampleFormControlTextarea1"
                 rows="3"
               />
             </div>
             <button type="submit" className="btn btn-primary">Submit</button>
+            <button
+              onClick={() => this.props.history.push('/')}
+              style={{ float: 'right' }}
+              type="click"
+              className="btn btn-secondary"
+            >
+              Back to all Reddits
+            </button>
           </form>
         </div>
       </div>
@@ -141,7 +169,6 @@ ArticleDumb.propTypes = {
   history: PropTypes.object,
   fetchCurrentReddit: PropTypes.func,
   fetchMockComments: PropTypes.func,
-  postFakeComment: PropTypes.func,
 };
 
 ArticleDumb.defaultProps = {
@@ -151,7 +178,6 @@ ArticleDumb.defaultProps = {
   history: {},
   fetchCurrentReddit: () => true,
   fetchMockComments: () => true,
-  postFakeComment: () => true,
 };
 
 
@@ -165,7 +191,6 @@ function mapStateToProps(store) {
 const mapDispatchToProps = {
   fetchCurrentReddit,
   fetchMockComments,
-  postFakeComment,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleDumb);
