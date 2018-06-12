@@ -11,6 +11,9 @@
 /server
 /.idea
 
+# db
+/srv/server/db.json
+
 public/main.bundle.js
 public/main.bundle.css
 
