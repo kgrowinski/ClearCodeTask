@@ -4,9 +4,6 @@ import {
   FETCH_CURRENT_ARTICLE,
   FETCH_MOCK_COMMENTS,
 } from '../../actions/types';
-import Config from '../../configuration';
-
-const { paginationLimit } = Config;
 
 const initialState = {
   articles: [],
@@ -16,7 +13,7 @@ const initialState = {
   },
   mockComments: [],
   paginationData: {
-    dist: paginationLimit,
+    dist: 5,
     before: null,
     after: null,
   },
