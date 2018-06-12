@@ -7,7 +7,6 @@ const {
 } = Config;
 
 export const fetchMockComments = () => async (dispatch) => {
-  // TODO: Add error handling.
   const res = await axios.get(mockCommentsURL);
 
   dispatch({
@@ -18,32 +17,25 @@ export const fetchMockComments = () => async (dispatch) => {
 
 export const fetchRedditArticles = (limit = articlesAmmount, after = null, before = null) =>
   async (dispatch) => {
-    try {
-      const res = await axios.get(redditArticlesURL, {
-        params: {
-          limit,
-          after,
-          before,
-        },
-      });
-      dispatch({
-        type: FETCH_REDDIT_ARTICLES,
-        payload: res,
-      });
-    } catch (err) {
-      console.log(err);
-    }
+    const res = await axios.get(redditArticlesURL, {
+      params: {
+        limit,
+        after,
+        before,
+      },
+    });
+    dispatch({
+      type: FETCH_REDDIT_ARTICLES,
+      payload: res,
+    });
   };
 
-export const fetchCurrentReddit = (redditID = null) =>
+export const fetchCurrentReddit = redditID =>
   async (dispatch) => {
-    try {
-      const res = await axios.get(`${redditSingleArticleURL}${redditID}.json`);
-      dispatch({
-        type: FETCH_CURRENT_ARTICLE,
-        payload: res,
-      });
-    } catch (err) {
-      console.log(err);
-    }
+    const res = await axios.get(`${redditSingleArticleURL}${redditID}.json`);
+
+    dispatch({
+      type: FETCH_CURRENT_ARTICLE,
+      payload: res,
+    });
   };

@@ -26,16 +26,13 @@ export class HomePageDumb extends React.Component {
 
   changePagination(operator) {
     const { after, before } = this.props.paginationData;
-    const { id } = this.props.match.params;
 
     switch (operator) {
       case 'next':
         this.props.history.push(after);
         break;
       case 'prev':
-        if (id) {
-          this.props.history.push(before);
-        }
+        this.props.history.push(before);
         break;
       default:
         break;
@@ -48,19 +45,16 @@ export class HomePageDumb extends React.Component {
       const { data } = redditArticles[article];
 
       return (
-        <div className="list-group" key={data.id}>
-          <Link to={`/articles/${data.id}`} className="list-group-item list-group-item-action flex-column align-items-start">
-            <div className="d-flex w-100 justify-content-between">
-              <h5 className="mb-1">{data.author}</h5>
-              <small>{moment.unix(data.created).utc().format('DD MM YYYY')}</small>
-            </div>
-            <p className="mb-1">{data.title}</p>
-          </Link>
-        </div>
+        <Link to={`/articles/${data.id}`} key={data.id} className="list-group-item list-group-item-action flex-column align-items-start">
+          <div className="d-flex w-100 justify-content-between">
+            <h5 className="mb-1">{data.author}</h5>
+            <small>{moment.unix(data.created).utc().format('DD MM YYYY')}</small>
+          </div>
+          <p className="mb-1">{data.title}</p>
+        </Link>
       );
     });
   }
-
 
   render() {
     const { id } = this.props.match.params;
@@ -86,14 +80,14 @@ export class HomePageDumb extends React.Component {
           <nav aria-label="Page navigation example">
             <ul className="pagination">
               {(id && before) &&
-              <li className="page-item" onClick={() => this.changePagination('prev')}>
+              <li className="page-item previous" onClick={() => this.changePagination('prev')}>
                 <div className="page-link" aria-label="Previous">
                   <span aria-hidden="true">&laquo; Previous</span>
                   <span className="sr-only">Previous</span>
                 </div>
               </li>
               }
-              <li className="page-item" onClick={() => this.changePagination('next')}>
+              <li className="page-item next" onClick={() => this.changePagination('next')}>
                 <div className="page-link" aria-label="Next">
                   <span aria-hidden="true">Next &raquo;</span>
                   <span className="sr-only">Next</span>
