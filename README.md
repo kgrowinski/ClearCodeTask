@@ -12,6 +12,6 @@ docker-compose up -d
 Also if you don't want to use **docker** you can run:  
 ```bash
 export NODE_ENV=production
-yarn install && yarn prod
+yarn
 ```
 in main application directory.
