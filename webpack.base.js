@@ -6,7 +6,6 @@ const webpack = require('webpack');
 
 module.exports = {
   // Enable webpack to run babel on every file
-  mode: nodeEnv,
   module: {
     rules: [
       {
