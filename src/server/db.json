@@ -1,22 +1,4 @@
 {
   "comments": [
-    {
-      "data": {
-        "body": "Hello",
-        "author": "Me@me.com",
-        "created": 1528831837,
-        "postId": "8pppi4"
-      },
-      "id": 1
-    },
-    {
-      "data": {
-        "body": "HEllo",
-        "author": "Hello@com.com",
-        "created": 1528832174,
-        "postId": "8pppi4"
-      },
-      "id": 2
-    }
   ]
 }
