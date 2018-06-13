@@ -1,5 +1,7 @@
 ## CLEAR CODE TAKS 
 
+#####This Repository contains code of application that reads Reddit feed and mock commenting behaviour.
+
 To Run Application go to `/.docker`
 rename `.env.production.dist` to `.env` and run: 
 
